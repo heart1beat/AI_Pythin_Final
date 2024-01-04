@@ -184,3 +184,7 @@ predictions = model.predict(img_array)
 score = float(tf.sigmoid(predictions[0][0]))
 print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
 ```
+
+
+# 結果演示
+![image](https://github.com/heart1beat/AI_Pythin_Final/blob/main/cat_recognizer.png)
