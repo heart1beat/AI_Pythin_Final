@@ -9,7 +9,7 @@ from keras import layers
 from tensorflow import data as tf_data
 import matplotlib.pyplot as plt
 import tensorflow as tf
-```python
+```
 
 #載入資料：貓狗資料集
 ```python
@@ -18,6 +18,7 @@ import tensorflow as tf
 ```python
 !unzip -q kagglecatsanddogs_5340.zip
 !ls
+```
 
 #過濾掉損壞的影像
 ```python
@@ -38,6 +39,7 @@ for folder_name in ("Cat", "Dog"):
             os.remove(fpath)
 
 print(f"Deleted {num_skipped} images.")
+```
 
 #生成一個Dataset
 ```python
@@ -52,6 +54,7 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
     image_size=image_size,
     batch_size=batch_size,
 )
+```
 
 #視覺化數據
 ```python
@@ -62,7 +65,7 @@ for images, labels in train_ds.take(1):
         plt.imshow(np.array(images[i]).astype("uint8"))
         plt.title(int(labels[i]))
         plt.axis("off")
-
+```
 
 #使用影像資料增強
 ```python
@@ -76,7 +79,7 @@ def data_augmentation(images):
     for layer in data_augmentation_layers:
         images = layer(images)
     return images
-
+```
 ```python
 plt.figure(figsize=(10, 10))
 for images, _ in train_ds.take(1):
@@ -85,6 +88,7 @@ for images, _ in train_ds.take(1):
         ax = plt.subplot(3, 3, i + 1)
         plt.imshow(np.array(augmented_images[0]).astype("uint8"))
         plt.axis("off")
+```
 
 #配置資料集以提高效能
 ```python
@@ -95,6 +99,7 @@ train_ds = train_ds.map(
 # Prefetching samples in GPU memory helps maximize GPU utilization.
 train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
 val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
+```
 
 #建立一個模型
 ```python
@@ -145,6 +150,7 @@ def make_model(input_shape, num_classes):
 
 model = make_model(input_shape=image_size + (3,), num_classes=2)
 keras.utils.plot_model(model, show_shapes=True)
+```
 
 #訓練模型
 ```python
@@ -164,8 +170,9 @@ model.fit(
     callbacks=callbacks,
     validation_data=val_ds,
 )
+```
 
-#結果演示
+#對新數據進行推理
 ```python
 img = keras.utils.load_img("PetImages/Cat/1014.jpg", target_size=image_size)
 plt.imshow(img)
@@ -176,3 +183,4 @@ img_array = tf.expand_dims(img_array, 0)  # Create batch axis
 predictions = model.predict(img_array)
 score = float(tf.sigmoid(predictions[0][0]))
 print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
+```
