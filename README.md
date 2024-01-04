@@ -9,6 +9,7 @@ from keras import layers
 from tensorflow import data as tf_data
 import matplotlib.pyplot as plt
 import tensorflow as tf
+```python
 
 #載入資料：貓狗資料集
 ```python
