@@ -1,6 +1,6 @@
 人工智慧期末報告 貓狗從頭開始影像分類 11124147 資工2A 陳秉綜
 
-#設定
+# 設定
 ```python
 import os
 import numpy as np
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 ```
 
-#載入資料：貓狗資料集
+# 載入資料：貓狗資料集
 ```python
 !curl -O https://download.microsoft.com/download/3/E/1/3E1C3F21-ECDB-4869-8368-6DEBA77B919F/kagglecatsanddogs_5340.zip
 
@@ -20,7 +20,7 @@ import tensorflow as tf
 !ls
 ```
 
-#過濾掉損壞的影像
+# 過濾掉損壞的影像
 ```python
 num_skipped = 0
 for folder_name in ("Cat", "Dog"):
@@ -41,7 +41,7 @@ for folder_name in ("Cat", "Dog"):
 print(f"Deleted {num_skipped} images.")
 ```
 
-#生成一個Dataset
+# 生成一個Dataset
 ```python
 image_size = (180, 180)
 batch_size = 128
@@ -56,7 +56,7 @@ train_ds, val_ds = keras.utils.image_dataset_from_directory(
 )
 ```
 
-#視覺化數據
+# 視覺化數據
 ```python
 plt.figure(figsize=(10, 10))
 for images, labels in train_ds.take(1):
@@ -67,7 +67,7 @@ for images, labels in train_ds.take(1):
         plt.axis("off")
 ```
 
-#使用影像資料增強
+# 使用影像資料增強
 ```python
 data_augmentation_layers = [
     layers.RandomFlip("horizontal"),
@@ -90,7 +90,7 @@ for images, _ in train_ds.take(1):
         plt.axis("off")
 ```
 
-#配置資料集以提高效能
+# 配置資料集以提高效能
 ```python
 train_ds = train_ds.map(
     lambda img, label: (data_augmentation(img), label),
@@ -101,7 +101,7 @@ train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
 val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
 ```
 
-#建立一個模型
+# 建立一個模型
 ```python
 def make_model(input_shape, num_classes):
     inputs = keras.Input(shape=input_shape)
@@ -152,7 +152,7 @@ model = make_model(input_shape=image_size + (3,), num_classes=2)
 keras.utils.plot_model(model, show_shapes=True)
 ```
 
-#訓練模型
+# 訓練模型
 ```python
 epochs = 25
 
@@ -172,7 +172,7 @@ model.fit(
 )
 ```
 
-#對新數據進行推理
+# 對新數據進行推理
 ```python
 img = keras.utils.load_img("PetImages/Cat/1014.jpg", target_size=image_size)
 plt.imshow(img)
